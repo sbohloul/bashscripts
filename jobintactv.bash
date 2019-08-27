@@ -26,28 +26,28 @@
 # 7	28	 178G or  183105M	2 x Intel Xeon Gold 5120 Skylake @ 2.2GHz	4.0TB NVMe SSD	8 x NVIDIA V100 Volta (16GB HBM2 memory)
 
 
-INP="$@"
+export INP="$@"
 export HOST="$HOSTNAME"
 
-ACC="${INP#*acc:}"
-if [[ $ACC == "$INP" ]]; then 
+if [[ $INP != *"acc"*  ]]; then 
    ACC="account=rrg-hongguo-ad"
 else
+   ACC="${INP#*acc:}"
    ACC="${ACC%%[[:blank:]]*}"
 fi
 
-MEM="${INP#*mem:}"
-if [[ $MEM == "$INP" ]]; then 
+if [[ $INP != *"mem"*  ]]; then 
    MEM="0"
-else   
+else
+   MEM="${INP#*mem:}"
    MEM="${MEM%%[[:blank:]]*}"
 fi
 
 if [[ $HOST == *"beluga"* ]]; then
    NTASK="40"
-elif [[ $HOST == *"cedar*"* ]]; then
+elif [[ $HOST == *"cedar"* ]]; then
    NTASK="32"
-elif [[ $HOST == *"graham*"* ]]; then
+elif [[ $HOST == *"graham"* ]]; then
    NTASK="32" 
 fi
 
@@ -60,7 +60,8 @@ echo "|  memory: |$MEM"
 echo " ----------"
 echo ""
 
-salloc --time=03:00:00 --nodes=1 --ntasks=$NTASK --mem=$MEM --$ACC
+echo "salloc --time=03:00:00 --nodes=1 --ntasks=$NTASK --mem=$MEM --$ACC"
+#salloc --time=03:00:00 --nodes=1 --ntasks="$NTASK" --mem="$MEM" --"$ACC"
 
 # if [ -z "$MEM" ]; then
    # MEM="0"
