@@ -29,14 +29,14 @@
 export INP="$@"
 export HOST="$HOSTNAME"
 
-if [[ $INP != *"acc"*  ]]; then 
+if [[ $INP != *"acc:"*  ]]; then 
    ACC="account=rrg-hongguo-ad"
 else
    ACC="${INP#*acc:}"
    ACC="${ACC%%[[:blank:]]*}"
 fi
 
-if [[ $INP != *"mem"*  ]]; then 
+if [[ $INP != *"mem:"*  ]]; then 
    MEM="0"
 else
    MEM="${INP#*mem:}"
@@ -51,7 +51,6 @@ elif [[ $HOST == *"graham"* ]]; then
    NTASK="32" 
 fi
 
-
 echo ""
 echo " ----------"
 echo "| account: |$ACC" 
@@ -60,8 +59,8 @@ echo "|  memory: |$MEM"
 echo " ----------"
 echo ""
 
-echo "salloc --time=03:00:00 --nodes=1 --ntasks=$NTASK --mem=$MEM --$ACC"
-#salloc --time=03:00:00 --nodes=1 --ntasks="$NTASK" --mem="$MEM" --"$ACC"
+#echo "salloc --time=03:00:00 --nodes=1 --ntasks=$NTASK --mem=$MEM --$ACC"
+salloc --time=03:00:00 --nodes=1 --ntasks="$NTASK" --mem="$MEM" --"$ACC"
 
 # if [ -z "$MEM" ]; then
    # MEM="0"

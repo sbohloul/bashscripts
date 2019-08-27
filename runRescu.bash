@@ -1,34 +1,48 @@
 #!/bin/bash
 
-INP="$@"
+export INP="$@"
+export RESCUBIN="/home/sbohloul/bin_rescu"
 
-MATLABVER="${INP#*matlab:}"
-if [[ $MATLABVER == "$INP" ]]; then echo "matlab versoin is not given." && exit; fi
-MATLABVER="${MATLABVER%%[[:blank:]]*}"
+if [[ $INP != *"matlab:"*  ]]; then 
+   echo "matlab versoin is not given." && exit
+else
+   MATLABVER="${INP#*matlab:}"
+   MATLABVER="${MATLABVER%%[[:blank:]]*}"
+fi
 #echo "$MATLABVER"
 
-PPN="${INP#*ppn:}"
-if [[ $PPN == "$INP" ]]; then echo "ppn is not given." && exit; fi
-PPN="${PPN%%[[:blank:]]*}"
+if [[ $INP != *"ppn:"*  ]]; then 
+   echo "ppn is not given." && exit
+else
+   PPN="${INP#*ppn:}"
+   PPN="${PPN%%[[:blank:]]*}"
+fi
 #echo "$PPN"
 
-NTASK="${INP#*ntask:}"
-if [[ $NTASK == "$INP" ]]; then echo "ntask is not given." && exit; fi
-NTASK="${NTASK%%[[:blank:]]*}"
+if [[ $INP != *"ntask:"* ]]; then 
+   echo "ntask is not given." && exit
+else
+   NTASK="${INP#*ntask:}"
+   NTASK="${NTASK%%[[:blank:]]*}"
+fi
 #echo "$NTASK"
 
-CALC="${INP#*calc:}"
-if [[ $CALC == "$INP" ]]; then echo "calculation type(s) is not given." && exit; fi
-CALC="${CALC%%[[:blank:]]*}"
+if [[ $INP != *"calc:"* ]]; then 
+   echo "calc is not given." && exit
+else
+   CALC="${INP#*calc:}"
+   CALC="${CALC%%[[:blank:]]*}"
+fi
 #echo "$CALC"
+
 CALC=$(sed -e 's/,/ /g' <<< "$CALC")
 
 if [[ $MATLABVER == "2014a" ]]; then
    module load gcc/7.3.0 openmpi/3.1.2 matlab/2014a
-   export RESCUSRC=/home/sbohloul/bin_rescu/rescu_wrkdir_matlab2014a/rescumat/Functions
+   export RESCUSRC="$RESCUBIN/rescu_wrkdir_matlab2014a/rescumat/Functions"
 elif [[ $MATLABVER == "2017a" ]]; then
    module load gcc/4.8.5 openmpi/1.8.8 matlab/2017a
-   export RESCUSRC=/home/sbohloul/bin_rescu/rescu_wrkdir_matlab2017a/rescumat/Functions
+   export RESCUSRC="$RESCUBIN/rescu_wrkdir_matlab2017a/rescumat/Functions"
 else
    echo "RESCU is not installed for matlab $MATLABVER version." && exit
 fi
@@ -60,5 +74,26 @@ for RUN in $CALC; do
    echo "input file found: ${INPUTFILE#./*}"
    echo "----------------------------------"
    
-   mpiexec --map-by ppr:$PPN:node:pe=$OMP_NUM_THREADS $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
+   #mpiexec --map-by ppr:$PPN:node:pe=$OMP_NUM_THREADS $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
 done
+
+
+# MATLABVER="${INP#*matlab:}"
+# if [[ $MATLABVER == "$INP" ]]; then echo "matlab versoin is not given." && exit; fi
+# MATLABVER="${MATLABVER%%[[:blank:]]*}"
+# #echo "$MATLABVER"
+
+# PPN="${INP#*ppn:}"
+# if [[ $PPN == "$INP" ]]; then echo "ppn is not given." && exit; fi
+# PPN="${PPN%%[[:blank:]]*}"
+# #echo "$PPN"
+
+# NTASK="${INP#*ntask:}"
+# if [[ $NTASK == "$INP" ]]; then echo "ntask is not given." && exit; fi
+# NTASK="${NTASK%%[[:blank:]]*}"
+# #echo "$NTASK"
+
+# CALC="${INP#*calc:}"
+# if [[ $CALC == "$INP" ]]; then echo "calculation type(s) is not given." && exit; fi
+# CALC="${CALC%%[[:blank:]]*}"
+# #echo "$CALC"
