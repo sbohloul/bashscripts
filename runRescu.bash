@@ -1,7 +1,6 @@
 #!/bin/bash
 
 export INP="$@"
-export RESCUBIN="/home/sbohloul/bin_rescu"
 
 if [[ $INP != *"matlab:"*  ]]; then 
    echo "matlab versoin is not given." && exit
@@ -34,18 +33,20 @@ else
    CALC="${CALC%%[[:blank:]]*}"
 fi
 #echo "$CALC"
-
 CALC=$(sed -e 's/,/ /g' <<< "$CALC")
 
 if [[ $MATLABVER == "2014a" ]]; then
    module load gcc/7.3.0 openmpi/3.1.2 matlab/2014a
-   export RESCUSRC="$RESCUBIN/rescu_wrkdir_matlab2014a/rescumat/Functions"
 elif [[ $MATLABVER == "2017a" ]]; then
    module load gcc/4.8.5 openmpi/1.8.8 matlab/2017a
-   export RESCUSRC="$RESCUBIN/rescu_wrkdir_matlab2017a/rescumat/Functions"
+elif [[ $MATLABVER == "2019a" ]]; then
+   module load gcc/7.3.0 openmpi/3.1.2 matlab/2019a
 else
    echo "RESCU is not installed for matlab $MATLABVER version." && exit
 fi
+RESCUDIR="rescu_wrkdir_matlab$MATLABVER/rescumat/Functions"
+export RESCUSRC="/home/sbohloul/bin_rescu/$RESCUDIR"   
+
 
 # matlab command
 export OMPI_MCA_mca_base_component_show_load_errors=0
@@ -74,7 +75,7 @@ for RUN in $CALC; do
    echo "input file found: ${INPUTFILE#./*}"
    echo "----------------------------------"
    
-   #mpiexec --map-by ppr:$PPN:node:pe=$OMP_NUM_THREADS $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
+   mpiexec --map-by ppr:$PPN:node:pe=$OMP_NUM_THREADS $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
 done
 
 
