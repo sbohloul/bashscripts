@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export INP="$@"
+INP="$@"
 
 if [[ $INP != *"matlab:"*  ]]; then 
    echo "matlab versoin is not given." && exit
@@ -45,7 +45,7 @@ else
    echo "RESCU is not installed for matlab $MATLABVER version." && exit
 fi
 RESCUDIR="rescu_wrkdir_matlab$MATLABVER/rescumat/Functions"
-export RESCUSRC="/home/sbohloul/bin_rescu/$RESCUDIR"   
+RESCUSRC="/home/sbohloul/bin_rescu/$RESCUDIR"   
 
 
 # matlab command
@@ -56,7 +56,6 @@ if [ $OMP_NUM_THREADS -eq 1 ]; then
 else
    MATCMD="matlab -nodisplay -nojvm -nosplash -r"
 fi
-#
 
 
 for RUN in $CALC; do
@@ -74,8 +73,9 @@ for RUN in $CALC; do
    echo "| ---------------------- "
    echo "input file found: ${INPUTFILE#./*}"
    echo "----------------------------------"
-   
-   mpiexec --map-by ppr:$PPN:node:pe=$OMP_NUM_THREADS $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
+   #
+   #mpiexec --map-by ppr:$PPN:node:pe=$OMP_NUM_THREADS $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
+   srun $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
 done
 
 
