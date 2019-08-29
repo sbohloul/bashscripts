@@ -22,4 +22,4 @@ cd $SLURM_SUBMIT_DIR
 
 # run RESCU
 #mpiexec --map-by ppr:$PPN:node:pe=$OMP_NUM_THREADS XMATCMD "addpath(genpath('$RESCUSRC')); rescu -i XIN"
-$SCRDIR/runRescu.bash "matlab:XMATLABVER ppn:$PPN ntask:$OMP_NUM_THREADS calc:XCALC
+$SCRDIR/runRescu.bash "matlab:XMATLABVER ppn:$PPN ntask:$OMP_NUM_THREADS calc:XCALC mpicmd:srun"
