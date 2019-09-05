@@ -10,7 +10,7 @@ HOST="$HOSTNAME"
 if [[ $HOST == *"beluga"* ]]; then
    MATLABDEF="2019a"; MEMDEF="0"
 elif [[ $HOST == *"cedar"* ]]; then
-   MATLABDEF="2017a"; MEMDEF="0"
+   MATLABDEF="2014a"; MEMDEF="0"
 elif [[ $HOST == *"graham"* ]]; then
    MATLABDEF="2019a"; MEMDEF="0"
 fi
@@ -126,7 +126,7 @@ for RUN in $CALC; do
 	sed -i "s|XMATLABVER|${MATLABVER}|g" $PBSFILE	
 	sed -i "s|XCALC|${RUN}|g" $PBSFILE	
 	#
-	#sbatch $PBSFILE
+	sbatch $PBSFILE
 done
 
 

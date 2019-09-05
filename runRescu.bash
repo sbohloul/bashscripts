@@ -2,7 +2,7 @@
 
 INP="$@"
 HOST="$HOSTNAME"
-
+echo "$HOST"
 ######################
 # default parameters #
 ######################
@@ -61,7 +61,7 @@ fi
 # CALC=$(sed -e 's/,/ /g' <<< "$CALC")
 CALC="${CALC//,/ }"
 
-if [[ $MATLABVER == "2014a" ]] && [[ $HOST == *"cedar"* ]]; then
+if [[ $MATLABVER == "2014a" ]]; then
    module load gcc/7.3.0 openmpi/3.1.2 matlab/2014a
 elif [[ $MATLABVER == "2017a" ]]; then
    module load gcc/4.8.5 openmpi/1.8.8 matlab/2017a
@@ -76,7 +76,7 @@ RESCUSRC="/home/sbohloul/bin_rescu/$RESCUDIR"
 ##################
 # matlab command #
 ##################
-OMPI_MCA_mca_base_component_show_load_errors=0
+export OMPI_MCA_mca_base_component_show_load_errors=0
 OMP_NUM_THREADS=$NTASK && OPENBLAS_NUM_THREADS=$NTASK
 if [ $OMP_NUM_THREADS -eq 1 ]; then
    MATCMD="matlab -nodisplay -nojvm -nosplash -singleCompThread -r"
