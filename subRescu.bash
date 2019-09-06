@@ -68,6 +68,14 @@ else
 fi
 #echo "ntask:$NTASK"
 
+if [[ $INP != *"mpicmd:"*  ]]; then 
+   MPICMD=""
+else
+   MPICMD="${INP#*mpicmd:}"
+   MPICMD="${MPICMD%%[[:blank:]]*}"
+fi
+# echo "$MPICMD"
+
 if [[ $INP != *"calc:"* ]]; then 
    echo "calc is not given." && exit
 else
@@ -122,6 +130,8 @@ for RUN in $CALC; do
 	sed -i "s|XIN|${INPUTFILE}|g" $PBSFILE
 	sed -i "s|XOUT|${OUTPUTFILE}|g" $PBSFILE
 	sed -i "s|XMATCMD|${MATCMD}|g" $PBSFILE	
+	sed -i "s|XMPICMD|${MPICMD}|g" $PBSFILE	
+   
 	#
 	sed -i "s|XMATLABVER|${MATLABVER}|g" $PBSFILE	
 	sed -i "s|XCALC|${RUN}|g" $PBSFILE	

@@ -106,6 +106,9 @@ for RUN in $CALC; do
    #mpiexec --map-by ppr:$PPN:node:pe=$OMP_NUM_THREADS $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
    #srun $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
    $MPICMD $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
+   if [ -f resculog.out ]; then 
+      cat resculog.out >> "resculog_$CALC.out" && rm resculog.out
+   fi
 done
 
 
