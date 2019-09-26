@@ -10,7 +10,7 @@ HOST="$HOSTNAME"
 if [[ $HOST == *"beluga"* ]]; then
    MATLABDEF="2019a"; MEMDEF="0"
 elif [[ $HOST == *"cedar"* ]]; then
-   MATLABDEF="2014a"; MEMDEF="0"
+   MATLABDEF="2017a"; MEMDEF="0"
 elif [[ $HOST == *"graham"* ]]; then
    MATLABDEF="2019a"; MEMDEF="0"
 fi

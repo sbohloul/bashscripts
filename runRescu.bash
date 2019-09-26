@@ -64,7 +64,8 @@ CALC="${CALC//,/ }"
 if [[ $MATLABVER == "2014a" ]]; then
    module load gcc/7.3.0 openmpi/3.1.2 matlab/2014a
 elif [[ $MATLABVER == "2017a" ]]; then
-   module load gcc/4.8.5 openmpi/1.8.8 matlab/2017a
+   #module load gcc/4.8.5 openmpi/1.8.8 matlab/2017a
+   module load gcc/7.3.0 openmpi/3.1.2 matlab/2017a   
 elif [[ $MATLABVER == "2019a" ]]; then
    module load gcc/7.3.0 openmpi/3.1.2 matlab/2019a
 else

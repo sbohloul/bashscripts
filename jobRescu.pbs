@@ -12,8 +12,10 @@ export SCRDIR="$HOME/jobscripts/bashscripts"
 export OMPI_MCA_mca_base_component_show_load_errors=0
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 export PPN=$SLURM_TASKS_PER_NODE
+export NODELIST=$SLURM_JOB_NODELIST
 export MPICMD=XMPICMD
 cd $SLURM_SUBMIT_DIR
+echo "$NODELIST"
 
 #export PATH=/home/vincentm/software/MATLAB/R2017a/bin:$PATH
 #export MLM_LICENSE_FILE=/cvmfs/restricted.computecanada.ca/config/licenses/matlab/inst_mcgill/cedar.lic
@@ -26,7 +28,7 @@ cd $SLURM_SUBMIT_DIR
 
 if [[ $MPICMD == "srun"  ]]; then 
    $SCRDIR/runRescu.bash "matlab:XMATLABVER ppn:$PPN ntask:$OMP_NUM_THREADS calc:XCALC mpicmd:srun"
-elif [[ -z "$MPICMD" ]]
+elif [[ -z "$MPICMD" ]]; then
    $SCRDIR/runRescu.bash "matlab:XMATLABVER ppn:$PPN ntask:$OMP_NUM_THREADS calc:XCALC"
 else
    echo "no mpi command specified." && exit
