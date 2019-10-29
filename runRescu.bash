@@ -6,9 +6,9 @@ echo "$HOST"
 ######################
 # default parameters #
 ######################
-if [[ $HOST == *"beluga"* ]]; then
+if [[ $HOST == *"beluga"* ]] || [[ $HOST == *"blg"* ]] ; then
    MATLABDEF="2019a"; MEMDEF="0"
-elif [[ $HOST == *"cedar"* ]]; then
+elif [[ $HOST == *"cedar"* ]] || [[ $HOST == *"crd"* ]]; then
    MATLABDEF="2017a"; MEMDEF="0"
 elif [[ $HOST == *"graham"* ]]; then
    MATLABDEF="2019a"; MEMDEF="0"

@@ -82,9 +82,12 @@ else
    CALC="${INP#*calc:}"
    CALC="${CALC%%[[:blank:]]*}"
 fi
-# echo "calc:$CALC"
-CALC=$(sed -e 's/,/ /g' <<< "$CALC")
-# echo "$CALC"
+#echo "calc:$CALC"
+
+if [[ $CALC == *","* ]]; then
+   CALC=$(sed -e 's/,/ /g' <<< "$CALC")
+fi   
+#echo "$CALC"
 
 ##################
 # matlab command #
