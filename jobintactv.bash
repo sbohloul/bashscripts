@@ -36,6 +36,13 @@ else
    ACC="${ACC%%[[:blank:]]*}"
 fi
 
+if [[ $INP != *"gpu:"*  ]]; then 
+   GPU=""
+else
+   GPU="${INP#*gpu:}"
+   GPU="${GPU%%[[:blank:]]*}"
+fi
+
 if [[ $INP != *"mem:"*  ]]; then 
    MEM="0"
 else
@@ -59,8 +66,14 @@ echo "|  memory: |$MEM"
 echo " ----------"
 echo ""
 
-#echo "salloc --time=03:00:00 --nodes=1 --ntasks=$NTASK --mem=$MEM --$ACC"
-salloc --time=03:00:00 --nodes=1 --ntasks="$NTASK" --mem="$MEM" --"$ACC"
+if [[ -z $GPU ]]; then
+   alloc="--time=03:00:00 --nodes=1 --ntasks=$NTASK --mem=$MEM --$ACC"
+else
+   alloc="--time=03:00:00 --nodes=1 --ntasks=$NTASK --mem=$MEM --$ACC --gres=gpu:$GPU"
+fi
+
+# echo $alloc
+salloc $alloc
 
 # if [ -z "$MEM" ]; then
    # MEM="0"

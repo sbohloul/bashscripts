@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --account=rrg-hongguo-ad
 #SBATCH --nodes=XNODE --mem=XMEM
+#SBATCH --gres=gpu:XGPU
 #SBATCH --ntasks-per-node=XTASK --cpus-per-task=XPROC
 #SBATCH --time=XHOUR:00
 #SBATCH --job-name=XIN
@@ -27,9 +28,9 @@ echo "$NODELIST"
 #mpiexec --map-by ppr:$PPN:node:pe=$OMP_NUM_THREADS XMATCMD "addpath(genpath('$RESCUSRC')); rescu -i XIN"
 
 if [[ $MPICMD == "srun"  ]]; then 
-   $SCRDIR/runRescu.bash "matlab:XMATLABVER ppn:$PPN ntask:$OMP_NUM_THREADS calc:XCALC mpicmd:srun"
+   $SCRDIR/runRescu.bash "matlab:XMATLABVER rescu:XRESCU ppn:$PPN ntask:$OMP_NUM_THREADS calc:XCALC mpicmd:srun"
 elif [[ -z "$MPICMD" ]]; then
-   $SCRDIR/runRescu.bash "matlab:XMATLABVER ppn:$PPN ntask:$OMP_NUM_THREADS calc:XCALC"
+   $SCRDIR/runRescu.bash "matlab:XMATLABVER rescu:XRESCU ppn:$PPN ntask:$OMP_NUM_THREADS calc:XCALC"
 else
    echo "no mpi command specified." && exit
 fi

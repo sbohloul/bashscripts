@@ -7,11 +7,11 @@ echo "$HOST"
 # default parameters #
 ######################
 if [[ $HOST == *"beluga"* ]] || [[ $HOST == *"blg"* ]] ; then
-   MATLABDEF="2019a"; MEMDEF="0"
+   MATLABDEF="2019a"; MEMDEF="0"; 
 elif [[ $HOST == *"cedar"* ]] || [[ $HOST == *"crd"* ]]; then
-   MATLABDEF="2017a"; MEMDEF="0"
+   MATLABDEF="2017a"; MEMDEF="0"; 
 elif [[ $HOST == *"graham"* ]]; then
-   MATLABDEF="2019a"; MEMDEF="0"
+   MATLABDEF="2019a"; MEMDEF="0"; 
 fi
 # echo "$MATLABDEF $MEMDEF"
 
@@ -71,7 +71,19 @@ elif [[ $MATLABVER == "2019a" ]]; then
 else
    echo "RESCU is not installed for matlab $MATLABVER version." && exit
 fi
-RESCUDIR="rescu_wrkdir_matlab$MATLABVER/rescumat/Functions"
+
+
+if [[ $INP == *"rescu:"*  ]]; then 
+   RESCUVER="${INP#*rescu:}"
+   RESCUVER="${RESCUVER%%[[:blank:]]*}"
+fi
+if [[ -z $RESCUVER ]]; then
+   RESCUVER="wrkdir_matlab$MATLABVER"
+fi
+# echo "rescu versoin is set to default: $RESCUDEF"
+# echo "$RESCUVER"
+
+RESCUDIR="rescu_$RESCUVER/rescumat/Functions"
 RESCUSRC="/home/sbohloul/bin_rescu/$RESCUDIR"   
 
 ##################
@@ -94,7 +106,8 @@ for RUN in $CALC; do
    if [ -z "$INPUTFILE" ]; then echo "no input file found for $RUN calculation." && exit; fi
    echo "----------------------------------"
    echo "| ---------------------- "
-   echo "| ---------------------- "   
+   echo "| ---------------------- " 
+   echo "| rescu  =  $RESCUSRC    "      
    echo "| matlab =  $MATLABVER   "   
    echo "| calc   =  $RUN         "
    echo "| ppn    =  $PPN         "

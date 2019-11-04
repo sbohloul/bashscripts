@@ -19,6 +19,12 @@ fi
 #######################
 # checking the inputs #
 #######################
+if [[ $INP == *"gpu:"*  ]]; then 
+   GPU="${INP#*gpu:}"
+   GPU="${GPU%%[[:blank:]]*}"
+fi
+# echo "gpu:$GPU"
+
 if [[ $INP != *"mem:"*  ]]; then 
    MEM="$MEMDEF"
 else
@@ -89,6 +95,14 @@ if [[ $CALC == *","* ]]; then
 fi   
 #echo "$CALC"
 
+if [[ $INP == *"rescu:"*  ]]; then 
+   RESCUVER="${INP#*rescu:}"
+   RESCUVER="${RESCUVER%%[[:blank:]]*}"
+fi
+if [[ -z $RESCUVER ]]; then
+   RESCUVER="wrkdir_matlab$MATLABVER"
+fi
+
 ##################
 # matlab command #
 ##################
@@ -112,11 +126,13 @@ for RUN in $CALC; do
 	echo "| ---------------------- "  
    echo "| host   =  $HOST        "   
 	echo "| matlab =  $MATLABVER   "   
+	echo "| rescu  =  $RESCUVER    "      
 	echo "| time   =  $TIME        "   
 	echo "| calc   =  $RUN         "
 	echo "| node   =  $NODE        "
 	echo "| ppn    =  $PPN         "
 	echo "| ntask  =  $NTASK       "
+	echo "|   gpu  =  $GPU         "   
 	echo "| ---------------------- "
 	echo "| ---------------------- "
 	echo "input file found: ${INPUTFILE#./*}"
@@ -134,6 +150,13 @@ for RUN in $CALC; do
 	sed -i "s|XOUT|${OUTPUTFILE}|g" $PBSFILE
 	sed -i "s|XMATCMD|${MATCMD}|g" $PBSFILE	
 	sed -i "s|XMPICMD|${MPICMD}|g" $PBSFILE	
+	sed -i "s|XRESCU|${RESCUVER}|g" $PBSFILE	
+   
+   if [[ -z $GPU ]]; then
+      sed -i "/XGPU/d" $PBSFILE
+   else
+      sed -i "s|XGPU|${GPU}|g" $PBSFILE
+   fi
    
 	#
 	sed -i "s|XMATLABVER|${MATLABVER}|g" $PBSFILE	
