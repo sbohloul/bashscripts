@@ -67,9 +67,9 @@ echo " ----------"
 echo ""
 
 if [[ -z $GPU ]]; then
-   alloc="--time=03:00:00 --nodes=1 --ntasks=$NTASK --mem=$MEM --$ACC"
+   alloc="--time=03:00:00 --nodes=1 --ntasks=$NTASK --mem=$MEM --account=$ACC"
 else
-   alloc="--time=03:00:00 --nodes=1 --ntasks=$NTASK --mem=$MEM --$ACC --gres=gpu:$GPU"
+   alloc="--time=03:00:00 --nodes=1 --ntasks=$NTASK --mem=$MEM --account=$ACC --gres=gpu:$GPU"
 fi
 
 # echo $alloc

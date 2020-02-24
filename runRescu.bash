@@ -90,11 +90,13 @@ RESCUSRC="/home/sbohloul/bin_rescu/$RESCUDIR"
 # matlab command #
 ##################
 export OMPI_MCA_mca_base_component_show_load_errors=0
-OMP_NUM_THREADS=$NTASK && OPENBLAS_NUM_THREADS=$NTASK
+export OMP_NUM_THREADS=$NTASK && export OPENBLAS_NUM_THREADS=$NTASK
 if [ $OMP_NUM_THREADS -eq 1 ]; then
    MATCMD="matlab -nodisplay -nojvm -nosplash -singleCompThread -r"
 else
    MATCMD="matlab -nodisplay -nojvm -nosplash -r"
+   #MATCMD="matlab -nodisplay -nosplash -r"
+   
 fi
 
 ###########
