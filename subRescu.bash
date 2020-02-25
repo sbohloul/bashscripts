@@ -98,9 +98,15 @@ fi
 if [[ $INP == *"rescu:"*  ]]; then 
    RESCUVER="${INP#*rescu:}"
    RESCUVER="${RESCUVER%%[[:blank:]]*}"
-fi
-if [[ -z $RESCUVER ]]; then
+else
    RESCUVER="wrkdir_matlab$MATLABVER"
+fi
+
+if [[ $INP == *"profile:"*  ]]; then 
+   PROFILE="${INP#*profile:}"
+   PROFILE="${PROFILE%%[[:blank:]]*}"
+else
+   PROFILE="off"
 fi
 
 ##################
@@ -132,7 +138,7 @@ for RUN in $CALC; do
 	echo "| node   =  $NODE        "
 	echo "| ppn    =  $PPN         "
 	echo "| ntask  =  $NTASK       "
-	echo "|   gpu  =  $GPU         "   
+	echo "| gpu    =  $GPU         "   
 	echo "| ---------------------- "
 	echo "| ---------------------- "
 	echo "input file found: ${INPUTFILE#./*}"
@@ -151,6 +157,8 @@ for RUN in $CALC; do
 	sed -i "s|XMATCMD|${MATCMD}|g" $PBSFILE	
 	sed -i "s|XMPICMD|${MPICMD}|g" $PBSFILE	
 	sed -i "s|XRESCU|${RESCUVER}|g" $PBSFILE	
+	sed -i "s|XPROFILE|${PROFILE}|g" $PBSFILE	
+   
    
    if [[ -z $GPU ]]; then
       sed -i "/XGPU/d" $PBSFILE

@@ -15,6 +15,34 @@ elif [[ $HOST == *"graham"* ]]; then
 fi
 # echo "$MATLABDEF $MEMDEF"
 
+# # get input parameters
+# while [[ $INP == *":"* ]]; do
+   # VAR="${INP%%:*}" && echo "$VAR"
+   # INP="${INP#*:}" && echo "$INP"
+   # VAL="${INP%%[[:blank:]]*}" && echo "$VAL" 
+   # INP="${INP#*[[:blank:]]}" && echo "$INP"  
+   # #
+   # if [ $VAR == "ppn" ]; then PPN="$VAL"; fi
+   # if [ $VAR == "calc" ]; then CALC="$VAL"; fi      
+   # if [ $VAR == "ntask" ]; then NTASK="$VAL"; fi      
+   # if [ $VAR == "rescu" ]; then RESCUVER="$VAL"; fi 
+   # if [ $VAR == "matlab" ]; then MATLABVER="$VAL"; fi   
+   # if [ $VAR == "mpicmd" ]; then MPICMD="$VAL"; fi      
+   # if [ $VAR == "mpicmd" ]; then MPICMD="$VAL"; fi   
+   # if [ $VAR == "profile" ]; then PROFILE="$VAL"; fi       
+# done 
+
+# # check and exit
+# if [[ -z $PPN ]]; then echo -e "\e[31mppn is not given.\e[0m" && exit ; fi
+# if [[ -z $NTASK ]]; then echo -e "\e[31mntask is not given.\e[0m" && exit ; fi
+# if [[ -z $CALC ]]; then echo -e "\e[31mcalc is not given.\e[0m" && exit ; fi
+
+# # check and set default
+# if [[ -z $PROFILE ]]; then PROFILE="off"; fi
+# if [[ -z $MATLABVER  ]]; then MATLABVER="$MATLABDEF"; fi
+# if [[ -z $RESCUVER  ]]; then RESCUVER="wrkdir_matlab$MATLABVER"; fi
+
+
 #######################
 # checking the inputs #
 #######################
@@ -76,12 +104,18 @@ fi
 if [[ $INP == *"rescu:"*  ]]; then 
    RESCUVER="${INP#*rescu:}"
    RESCUVER="${RESCUVER%%[[:blank:]]*}"
-fi
-if [[ -z $RESCUVER ]]; then
+else
    RESCUVER="wrkdir_matlab$MATLABVER"
 fi
+
+if [[ $INP == *"profile:"*  ]]; then 
+   PROFILE="${INP#*profile:}"
+   PROFILE="${PROFILE%%[[:blank:]]*}"
+else
+   PROFILE="off"
+fi
 # echo "rescu versoin is set to default: $RESCUDEF"
-# echo "$RESCUVER"
+# echo "$PROFILE"
 
 RESCUDIR="rescu_$RESCUVER/rescumat/Functions"
 RESCUSRC="/home/sbohloul/bin_rescu/$RESCUDIR"   
@@ -121,12 +155,15 @@ for RUN in $CALC; do
    #
    #mpiexec --map-by ppr:$PPN:node:pe=$OMP_NUM_THREADS $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
    #srun $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
-   $MPICMD $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE"
+   if [ $PROFILE == "on" ]; then   
+      $MPICMD $MATCMD "addpath(genpath('$RESCUSRC')); rescu --profile -i $INPUTFILE; quit;"
+   else
+      $MPICMD $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE; quit;"   
+   fi
    if [ -f resculog.out ]; then 
       cat resculog.out >> "resculog_$CALC.out" && rm resculog.out
    fi
 done
-
 
 # MATLABVER="${INP#*matlab:}"
 # if [[ $MATLABVER == "$INP" ]]; then echo "matlab versoin is not given." && exit; fi
