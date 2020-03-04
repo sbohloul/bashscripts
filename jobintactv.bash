@@ -30,7 +30,7 @@ export INP="$@"
 export HOST="$HOSTNAME"
 
 if [[ $INP != *"acc:"*  ]]; then 
-   ACC="account=rrg-hongguo-ad"
+   ACC="def-hongguo"
 else
    ACC="${INP#*acc:}"
    ACC="${ACC%%[[:blank:]]*}"
