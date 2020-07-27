@@ -81,9 +81,9 @@ for RUN in $CALC; do
    echo "----------------------------------"
    #
    if [ $PROFILE == "on" ]; then   
-      $MPICMD $MATCMD "addpath(genpath('$RESCUSRC')); rescu --profile -i $INPUTFILE; quit;"
+      $MPICMD $MATCMD "addpath(genpath('$RESCUSRC')); rescu --smi --profile -i $INPUTFILE; quit;"
    else
-      $MPICMD $MATCMD "addpath(genpath('$RESCUSRC')); rescu -i $INPUTFILE; quit;"   
+      $MPICMD $MATCMD "addpath(genpath('$RESCUSRC')); rescu --smi -i $INPUTFILE; quit;"   
    fi
    if [ -f resculog.out ]; then 
       cat resculog.out >> "resculog_$CALC.out" && rm resculog.out

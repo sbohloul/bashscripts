@@ -53,7 +53,7 @@ fi
 if [[ $HOST == *"beluga"* ]]; then
    NTASK="40"
 elif [[ $HOST == *"cedar"* ]]; then
-   NTASK="32"
+   NTASK="48"
 elif [[ $HOST == *"graham"* ]]; then
    NTASK="32" 
 fi
